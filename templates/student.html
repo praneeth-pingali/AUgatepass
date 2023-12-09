@@ -19,12 +19,5 @@
         <textarea id="reason" name="reason" required></textarea><br>
         <button type="submit">Submit Request</button>
     </form>
-
-    <h2>Previous Requests</h2>
-    <ul>
-        {% for request in requests %}
-            <li><a href="/view_requests/{{ request['student_id'] }}">Request ID: {{ request['_id'] }} | Status: {{ request['status'] }}</a></li>
-        {% endfor %}
-    </ul>
 </body>
 </html>
