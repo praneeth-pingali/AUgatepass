@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Page</title>
+</head>
+<body>
+    <h1>Welcome Faculty</h1>
+
+    <h2>Requests</h2>
+    <form action="{{ url_for('faculty') }}" method="post">
+        {% for request in requests %}
+            <p>
+                Request ID: {{ request['_id'] }} | Student ID: {{ request['student_id'] }} | Status: {{ request['status'] }}
+                <button type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Allow</button>
+                <button type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Deny</button>
+                <input type="hidden" name="action" value="">  <!-- Single hidden input for action -->
+            </p>
+        {% endfor %}
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('[formaction="{{ url_for('faculty') }}"]');
+            buttons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    // Set the value of the hidden input based on the clicked button
+                    document.querySelector('input[name="action"]').value = button.innerText.toLowerCase();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

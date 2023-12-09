@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+</head>
+<body>
+    <h1>Welcome Student</h1>
+    <h2>Submit New Request</h2>
+    <form action="{{ url_for('student') }}" method="post">
+        <label for="student_id">Student ID:</label>
+        <input type="text" id="student_id" name="student_id" required><br>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="reason">Reason:</label>
+        <textarea id="reason" name="reason" required></textarea><br>
+        <button type="submit">Submit Request</button>
+    </form>
+
+    <h2>Previous Requests</h2>
+    <ul>
+        {% for request in requests %}
+            <li><a href="/view_requests/{{ request['student_id'] }}">Request ID: {{ request['_id'] }} | Status: {{ request['status'] }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

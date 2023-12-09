@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+</head>
+<body>
+    <h1>Requests for Student ID: {{ student_id }}</h1>
+    
+    {% if approved_requests %}
+        <h2>Approved Requests</h2>
+        {% for request in approved_requests %}
+            <p>
+                Request ID: {{ request['_id'] }} | Status: {{ request['status'] }} | Name: {{ request['name'] }} | Reason: {{ request['reason'] }}
+                <br>
+                <img src="{{ url_for('generate_qr', key=request['key']) }}" alt="QR Code for Request ID {{ request['_id'] }}">
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>No approved requests found.</p>
+    {% endif %}
+
+    <h2>All Requests</h2>
+    {% for request in requests %}
+        <p>
+            Request ID: {{ request['_id'] }} | Status: {{ request['status'] }} | Name: {{ request['name'] }} | Reason: {{ request['reason'] }}
+        </p>
+    {% endfor %}
+</body>
+</html>
