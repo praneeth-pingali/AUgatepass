@@ -11,12 +11,6 @@ app.config['MONGO_URI'] = 'mongodb+srv://pingalipraneeth1:DgCwSk9Cn9mTx32a@augat
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a random, secure value
 mongo = PyMongo(app)
 
-# Hardcoded credentials for demonstration purposes
-USERS = {
-    'student': {'username': 'student', 'password': 'password'},
-    'faculty': {'username': 'faculty', 'password': 'password'}
-}
-
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -24,7 +18,13 @@ def login():
         password = request.form['password']
         login_type = request.form['login_type']
 
-        if login_type in USERS and USERS[login_type]['password'] == password:
+        user_data = None
+        if login_type == 'student':
+            user_data = mongo.db.studentdata.find_one({'username': username, 'password': password})
+        elif login_type == 'faculty':
+            user_data = mongo.db.facultydata.find_one({'username': username, 'password': password})
+
+        if user_data:
             session['login_type'] = login_type
             if login_type == 'student':
                 return redirect(url_for('student'))
@@ -35,6 +35,28 @@ def login():
 
     return render_template('login.html')
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        login_type = request.form['login_type']
+
+        existing_user = None
+        if login_type == 'student':
+            existing_user = mongo.db.studentdata.find_one({'username': username})
+        elif login_type == 'faculty':
+            existing_user = mongo.db.facultydata.find_one({'username': username})
+        if existing_user:
+            return "Username already exists. Please choose a different username."
+        if login_type == 'student':
+            mongo.db.studentdata.insert_one({'username': username, 'password': password})
+        elif login_type == 'faculty':
+            mongo.db.facultydata.insert_one({'username': username, 'password': password})
+        return "Registration successful. You can now log in."
+
+    return render_template('register.html')
+
 @app.route('/student', methods=['GET', 'POST'])
 def student():
     if 'login_type' not in session or session['login_type'] != 'student':
@@ -44,14 +66,10 @@ def student():
         student_id = request.form['student_id']
         name = request.form['name']
         reason = request.form['reason']
-
-        # Save the form data to MongoDB
         mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending'})
         return redirect(url_for('student'))
 
-    student_id = '123'  # Replace '123' with the actual student ID
-    requests = mongo.db.requests.find({'student_id': student_id})
-    return render_template('student.html', requests=requests)
+    return render_template('student.html')
 
 @app.route('/faculty', methods=['GET', 'POST'])
 def faculty():
@@ -63,8 +81,7 @@ def faculty():
         action = request.form['action']
 
         if action == 'allow':
-            # Generate a random 4-digit key
-            random_key = str(random.randint(1000, 9999))
+            random_key = str(random.randint(100000, 999999))
             mongo.db.requests.update_one({'_id': ObjectId(request_id)}, {'$set': {'status': 'Approved', 'key': random_key}})
         
         elif action == 'deny':

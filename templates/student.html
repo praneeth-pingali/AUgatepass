@@ -11,11 +11,11 @@
     <h1>Welcome Student</h1>
     <h2>Submit New Request</h2>
     <form action="{{ url_for('student') }}" method="post">
-        <label for="student_id">Student ID:</label>
+        <label for="student_id">Student ID</label>
         <input type="text" id="student_id" name="student_id" required><br>
-        <label for="name">Name:</label>
+        <label for="name">Name</label>
         <input type="text" id="name" name="name" required><br>
-        <label for="reason">Reason:</label>
+        <label for="reason">Reason</label>
         <textarea id="reason" name="reason" required></textarea><br>
         <button type="submit">Submit Request</button>
     </form>
