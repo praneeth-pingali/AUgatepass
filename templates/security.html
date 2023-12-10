@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="path/to/styles.css">
+    <title>Security Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style6.css') }}">
+</head>
+<body>
+    <h1>Welcome to the Security Page</h1>
+
+    <div class="options-container">
+        <a class="option-button" href="{{ url_for('security', action='entry') }}">Visitor Entry</a>
+        <a class="option-button" href="{{ url_for('visitors_log') }}">Visitors Log View</a>
+    </div>
+
+    {% if request.args.get('action') == 'entry' %}
+        <h2>Visitor Entry Form:</h2>
+        <form action="{{ url_for('security') }}" method="post">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+            <label for="reason">Reason:</label>
+            <input type="text" id="reason" name="reason" required><br>
+            <label for="number">Number:</label>
+            <input type="text" id="number" name="number" required><br>
+            <input type="hidden" name="action" value="entry">
+            <button class="submit-button" type="submit">Submit</button>
+        </form>
+    {% endif %}
+</body>
+</html>

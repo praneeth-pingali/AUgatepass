@@ -4,6 +4,7 @@ import random
 from bson import ObjectId
 import qrcode
 from io import BytesIO
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -23,6 +24,8 @@ def login():
             user_data = mongo.db.studentdata.find_one({'username': username, 'password': password})
         elif login_type == 'faculty':
             user_data = mongo.db.facultydata.find_one({'username': username, 'password': password})
+        elif login_type == 'security':
+            user_data = mongo.db.securitydata.find_one({'username': username, 'password': password})
 
         if user_data:
             session['login_type'] = login_type
@@ -30,6 +33,8 @@ def login():
                 return redirect(url_for('student'))
             elif login_type == 'faculty':
                 return redirect(url_for('faculty'))
+            elif login_type == 'security':
+                return redirect(url_for('security'))
             elif login_type == 'view_requests':
                 return redirect(url_for('view_requests'))
 
@@ -47,12 +52,16 @@ def register():
             existing_user = mongo.db.studentdata.find_one({'username': username})
         elif login_type == 'faculty':
             existing_user = mongo.db.facultydata.find_one({'username': username})
+        elif login_type == 'security':
+            existing_user = mongo.db.securitydata.find_one({'username': username})
         if existing_user:
             return "Username already exists. Please choose a different username."
         if login_type == 'student':
             mongo.db.studentdata.insert_one({'username': username, 'password': password})
         elif login_type == 'faculty':
             mongo.db.facultydata.insert_one({'username': username, 'password': password})
+        elif login_type == 'security':
+            mongo.db.securitydata.insert_one({'username': username, 'password': password})
         return "Registration successful. You can now log in."
 
     return render_template('register.html')
@@ -66,7 +75,8 @@ def student():
         student_id = request.form['student_id']
         name = request.form['name']
         reason = request.form['reason']
-        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending'})
+        current_date = datetime.now().date().strftime('%d-%m-%Y')
+        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date})
         return redirect(url_for('student'))
 
     return render_template('student.html')
@@ -91,6 +101,32 @@ def faculty():
 
     requests = mongo.db.requests.find({'status': 'Pending'})
     return render_template('faculty.html', requests=requests)
+
+@app.route('/security', methods=['GET', 'POST'])
+def security():
+    if 'login_type' not in session or session['login_type'] not in ['student', 'faculty', 'security']:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        if request.form['action'] == 'entry':
+
+            name = request.form['name']
+            reason = request.form['reason']
+            number = request.form['number']
+            current_datetime = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+            mongo.db.visitors.insert_one({'name': name, 'reason': reason, 'number': number, 'datetime': current_datetime})
+
+            return redirect(url_for('security'))
+
+    return render_template('security.html')
+
+@app.route('/security/visitors_log')
+def visitors_log():
+    if 'login_type' not in session or session['login_type'] not in ['student', 'faculty', 'security']:
+        return redirect(url_for('login'))
+    visitors = mongo.db.visitors.find()
+
+    return render_template('visitors_log.html', visitors=visitors)
 
 @app.route('/view_requests', methods=['GET', 'POST'])
 def view_requests():
@@ -117,7 +153,6 @@ def generate_qr(key):
     qr.make(fit=True)
     img = qr.make_image(fill_color="black", back_color="white")
 
-    # Save the image to a BytesIO object
     img_io = BytesIO()
     img.save(img_io)
     img_io.seek(0)
@@ -129,7 +164,7 @@ def verify_qr(key):
     request_data = mongo.db.requests.find_one({'key': key, 'status': 'Approved'})
     
     if request_data:
-        return render_template('verify_qr.html', student_id=request_data['student_id'], name=request_data['name'], reason=request_data['reason'])
+        return render_template('verify_qr.html', student_id=request_data['student_id'], name=request_data['name'], reason=request_data['reason'], datetime=request_data['datetime'])
     else:
         return render_template('verify_qr_error.html', message='Invalid QR code or request not approved')
 
