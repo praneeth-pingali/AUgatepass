@@ -142,7 +142,7 @@ def view_requests():
 
 @app.route('/generate_qr/<key>')
 def generate_qr(key):
-    qr_url = f"http://augatepass.onrender.com/verifyqr/{key}"
+    qr_url = f"https://augatepass.onrender.com/verifyqr/{key}"
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
