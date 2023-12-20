@@ -198,14 +198,6 @@ def generate_frames():
                 webbrowser.open_new_tab(qr_data)
                 # Update the previous QR code value
                 previous = qr_data
-            # Convert the points to a NumPy array
-            points = np.array(barcode.polygon, dtype=np.int32)
-
-            # Reshape the array to a 2D array
-            points = points.reshape((-1, 1, 2))
-
-            # Draw a rectangle around the QR code
-            cv2.polylines(frame, [points], isClosed=True, color=(0, 255, 0), thickness=2)
         ret, jpeg = cv2.imencode('.jpg', frame)
         if not ret:
             break
