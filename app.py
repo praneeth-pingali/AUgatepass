@@ -8,7 +8,6 @@ from datetime import datetime
 import cv2
 from pyzbar import pyzbar
 import webbrowser
-import numpy as np
 
 app = Flask(__name__)
 
