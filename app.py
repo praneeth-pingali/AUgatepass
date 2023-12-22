@@ -6,7 +6,7 @@ import qrcode
 from io import BytesIO
 from datetime import datetime
 import cv2
-from pyzbar import pyzbar
+from pyzbar import *
 import webbrowser
 
 app = Flask(__name__)
