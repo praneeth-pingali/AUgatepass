@@ -25,7 +25,16 @@
             });
 
             // Get access to the camera
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact :  'environment' } }})
+            navigator.mediaDevices.enumerateDevices()
+                .then(function(devices) {
+                    var backCamera = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'));
+                    if (backCamera) {
+                        return navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: backCamera.deviceId } } });
+                    } else {
+                        console.error('Back camera not found.');
+                        throw new Error('Back camera not found.');
+                    }
+                })
                 .then(function(stream) {
                     var video = document.getElementById('qr-video');
                     video.srcObject = stream;
