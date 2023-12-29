@@ -14,7 +14,7 @@
     <div class="options-container">
         <a class="option-button" href="{{ url_for('security', action='entry') }}">Visitor Entry</a>
         <a class="option-button" href="{{ url_for('visitors_log') }}">Visitors Log View</a>
-        <a class="option-button" href="{{ url_for('cam') }}">Scan QR Code</a>
+        <a class="option-button" href="https://augatepass.onrender.com/cam">Scan QR Code</a>
     </div>
 
     {% if request.args.get('action') == 'entry' %}
