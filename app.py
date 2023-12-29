@@ -8,8 +8,10 @@ from datetime import datetime
 import cv2
 from pyzbar import *
 import webbrowser
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 app.config['MONGO_URI'] = 'mongodb+srv://pingalipraneeth1:DgCwSk9Cn9mTx32a@augatepass.1dvhlzv.mongodb.net/gatepass_db?retryWrites=true&w=majority'
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a random, secure value
@@ -172,59 +174,22 @@ def verify_qr(key):
         return render_template('verify_qr_error.html', message='Invalid QR code or request not approved')
     
 
-camera_enabled = False
-previous =None
-
-
-
-def generate_frames():
-    global previous
-    camera = cv2.VideoCapture(0)
-
-    while True:
-        success, frame = camera.read()
-        if not success:
-            break
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        barcodes = pyzbar.decode(gray)
-
-        for barcode in barcodes:
-            qr_data = barcode.data.decode('utf-8')
-            print(f"QR Code Data: {qr_data}")
-
-            if qr_data != previous:
-                # Open the URL in a new tab
-                webbrowser.open_new_tab(qr_data)
-                # Update the previous QR code value
-                previous = qr_data
-        ret, jpeg = cv2.imencode('.jpg', frame)
-        if not ret:
-            break
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + bytearray(jpeg) + b'\r\n\r\n')
-    camera.release()
-
 @app.route('/cam')
-def cam():
+def index():
     return render_template('cam.html')
 
-@app.route('/start_camera')
-def start_camera():
-    global camera_enabled
-    camera_enabled = True
-    return "Camera started"
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
 
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
 
-@app.route('/stop_camera')
-def stop_camera():
-    global camera_enabled
-    camera_enabled = False
-    return "Camera stopped"
-
-@app.route('/video_feed')
-def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+@socketio.on('qr_scanned')
+def handle_qr_scanned(data):
+    print('QR Code Scanned:', data['data'])
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True,allow_unsafe_werkzeug=True)
