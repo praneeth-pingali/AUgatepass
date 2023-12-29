@@ -28,12 +28,17 @@
             navigator.mediaDevices.enumerateDevices()
                 .then(function(devices) {
                     var backCamera = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'));
+                    var constraints;
+
                     if (backCamera) {
-                        return navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: backCamera.deviceId } } });
+                        // Use back camera on mobile devices
+                        constraints = { video: { deviceId: { exact: backCamera.deviceId } } };
                     } else {
-                        console.error('Back camera not found.');
-                        throw new Error('Back camera not found.');
+                        // Use any available camera on laptops/PCs
+                        constraints = { video: true };
                     }
+
+                    return navigator.mediaDevices.getUserMedia(constraints);
                 })
                 .then(function(stream) {
                     var video = document.getElementById('qr-video');
