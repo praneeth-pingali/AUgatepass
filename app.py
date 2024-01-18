@@ -119,7 +119,9 @@ def student():
         reason = request.form['reason']
         priority = prioritize_text(reason)
         current_date = datetime.now().date().strftime('%d-%m-%Y')
-        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date, 'priority': priority})
+        fac=mongo.db.students.find_one({'username': session['username']})
+        facc=fac.get("faculty")
+        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date, 'priority': priority, 'faculty': facc})
         return redirect(url_for('student'))
 
     return render_template('student.html')
@@ -141,8 +143,9 @@ def faculty():
             mongo.db.requests.update_one({'_id': ObjectId(request_id)}, {'$set': {'status': 'Denied', 'key': None}})
         
         return redirect(url_for('faculty'))
+    
 
-    requests = mongo.db.requests.find({'status': 'Pending'})
+    requests = mongo.db.requests.find({'status': 'Pending'} and {'faculty': session['username']})
     return render_template('faculty.html', requests=requests)
 
 @app.route('/security', methods=['GET', 'POST'])
