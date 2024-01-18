@@ -5,17 +5,48 @@ from bson import ObjectId
 import qrcode
 from io import BytesIO
 from datetime import datetime
-import cv2
 from pyzbar import *
-import webbrowser
 from flask_socketio import SocketIO
+import spacy
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
 app.config['MONGO_URI'] = 'mongodb+srv://pingalipraneeth1:DgCwSk9Cn9mTx32a@augatepass.1dvhlzv.mongodb.net/gatepass_db?retryWrites=true&w=majority'
-app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a random, secure value
+app.config['SECRET_KEY'] = 'your_secret_key'  
 mongo = PyMongo(app)
+nlp = spacy.load("en_core_web_sm")
+
+def prioritize_text(text):
+    doc = nlp(text.lower())  
+    
+    priority_keywords = {
+        "urgent": 2,
+        "health issue": 2,
+        "family emergency": 2,
+        "personal reasons": 1,
+        "vacation": 1,
+        "wedding": 1,
+        "birth of a child": 1,
+        "bereavement": 2,
+        "educational purposes": 1,
+        "unplanned event": 1,
+    }
+
+    priority_labels = {
+    3: "high",
+    2: "medium",
+    1: "low",
+    }
+
+    priority = 1  
+
+    for keyword, weight in priority_keywords.items():
+        if keyword in doc.text:
+            priority = max(priority, weight)
+
+    return priority_labels[priority]
+
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -80,8 +111,9 @@ def student():
         student_id = request.form['student_id']
         name = request.form['name']
         reason = request.form['reason']
+        priority = prioritize_text(reason)
         current_date = datetime.now().date().strftime('%d-%m-%Y')
-        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date})
+        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date, 'priority': priority})
         return redirect(url_for('student'))
 
     return render_template('student.html')
