@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-    max-width: 400px;
+    max-width: 600px; /* Adjusted to accommodate the image and text */
     margin: 50px auto;
     background-color: #fff;
     padding: 20px;
@@ -17,6 +17,14 @@ body {
 h1 {
     text-align: center;
     color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 img {
+    max-width: 250px; /* Set maximum width to 100% of its container */
+    margin-right: 10px; /* Adjust the margin as needed */
 }
 
 .login-form {
