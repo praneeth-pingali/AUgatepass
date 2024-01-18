@@ -5,3 +5,4 @@ gunicorn==21.2.0
 Werkzeug==2.2.2
 pyzbar==0.1.8
 Flask-SocketIO==5.3.6
+spacy==2.2.4

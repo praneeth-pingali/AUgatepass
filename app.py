@@ -1,5 +1,6 @@
 from flask import *
 from flask_pymongo import PyMongo
+from flask_session import Session
 import random
 from bson import ObjectId
 import qrcode
@@ -16,6 +17,10 @@ app.config['MONGO_URI'] = 'mongodb+srv://pingalipraneeth1:DgCwSk9Cn9mTx32a@augat
 app.config['SECRET_KEY'] = 'your_secret_key'  
 mongo = PyMongo(app)
 nlp = spacy.load("en_core_web_sm")
+
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 def prioritize_text(text):
     doc = nlp(text.lower())  
@@ -54,6 +59,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         login_type = request.form['login_type']
+        session["username"] = request.form['username']
 
         user_data = None
         if login_type == 'student':
