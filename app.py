@@ -55,15 +55,26 @@ def prioritize_text(text):
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    if session.get("login_type"):
+        if (session["login_type"] == "student"):
+            return redirect(url_for('student'))
+        if (session["login_type"] == "faculty"):
+            return redirect(url_for('faculty'))
+        if (session["login_type"] == "security"):
+            return redirect(url_for('security'))
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         login_type = request.form['login_type']
         session["username"] = request.form['username']
+        session["login_type"] = request.form['login_type']
 
         user_data = None
         if login_type == 'student':
             user_data = mongo.db.studentdata.find_one({'username': username, 'password': password})
+            user = mongo.db.students.find_one({'username': username})
+            session['name'] = user.get('name', '')
         elif login_type == 'faculty':
             user_data = mongo.db.facultydata.find_one({'username': username, 'password': password})
         elif login_type == 'security':
@@ -81,6 +92,11 @@ def login():
                 return redirect(url_for('view_requests'))
 
     return render_template('login.html')
+
+@app.route("/logout")
+def logout():
+    session["login_type"] = None
+    return redirect("/")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -176,15 +192,13 @@ def visitors_log():
 
 @app.route('/view_requests', methods=['GET', 'POST'])
 def view_requests():
-    if request.method == 'POST':
-        student_id = request.form['student_id']
+    
+        student_id = session['username']
         requests = list(mongo.db.requests.find({'student_id': student_id}))
         
         approved_requests = [req for req in requests if req['status'] == 'Approved']
 
-        return render_template('view_requests.html', student_id=student_id, requests=requests, approved_requests=approved_requests)
-
-    return render_template('view_requests_form.html')
+        return render_template('view_requests.html', student_id=student_id, requests=requests, approved_requests=approved_requests)  
 
 @app.route('/generate_qr/<key>')
 def generate_qr(key):

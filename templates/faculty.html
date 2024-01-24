@@ -22,6 +22,10 @@
         {% endfor %}
     </form>
 
+    <div class="options-container">
+        <a class="option-button" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const buttons = document.querySelectorAll('[formaction="{{ url_for('faculty') }}"]');
