@@ -7,8 +7,19 @@
     <title>View Requests</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
 </head>
-<body>
-    <h1>Requests for Student ID: {{ student_id }}</h1>
+<body>   
+
+<div class="top-right-buttons">
+    <form action="{{ url_for('logout') }}" method="get">
+        <button type="submit">Logout</button>
+    </form> 
+
+<form action="{{ url_for('student') }}" method="get">
+        <button type="submit">Back To Home</button>
+    </form> 
+</div>
+
+<h1>Requests for Student ID: {{ student_id }}</h1>
     
     {% if approved_requests %}
         <h2>Approved Requests</h2>

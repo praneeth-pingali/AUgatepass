@@ -1,11 +1,30 @@
 /* Existing styles */
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: Trebuchet MS, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    text-align: center;
 }
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(221, 217, 217, 0.8);
+    filter: blur(10px); /* Adjust the blur amount as needed */
+    z-index: -1; /* Places the background behind the content */
+  }
+
+input[type="text"]:focus,
+        textarea:focus {
+            border: 2px solid #b80606; /* Change the color to your desired highlight color */
+            outline: none; /* Remove the default focus outline */
+        }
 
 h1 {
     color: #333;

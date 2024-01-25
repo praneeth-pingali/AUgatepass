@@ -15,8 +15,8 @@
         {% for request in requests %}
             <p>
                 Request ID: {{ request['_id'] }} | Student ID: {{ request['student_id'] }} | Name: {{ request['name']}} | Reason: {{ request['reason']}} | Status: {{ request['status']  }} | Priority: {{ request['priority']}}
-                <button type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Allow</button>
-                <button type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Deny</button>
+                <button class="allow> type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Allow</button>
+                <button class="deny" type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Deny</button>
                 <input type="hidden" name="action" value="">  <!-- Single hidden input for action -->
             </p>
         {% endfor %}

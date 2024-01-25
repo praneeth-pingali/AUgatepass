@@ -30,7 +30,7 @@
                     var backCamera = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'));
                     var constraints;
 
-                    if (backCamera) {
+                    if (0) {
                         // Use back camera on mobile devices
                         constraints = { video: { deviceId: { exact: backCamera.deviceId } } };
                     } else {
