@@ -130,8 +130,8 @@ def student():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        student_id = request.form['student_id']
-        name = request.form['name']
+        student_id = session['username']
+        name = session['name']
         reason = request.form['reason']
         priority = prioritize_text(reason)
         current_date = datetime.now().date().strftime('%d-%m-%Y')
