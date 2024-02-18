@@ -161,7 +161,8 @@ def faculty():
         return redirect(url_for('faculty'))
     
 
-    requests = mongo.db.requests.find({'status': 'Pending'} and {'faculty': session['username']})
+    requests = mongo.db.requests.find({'status': 'Pending', 'faculty': session['username']})
+
     return render_template('faculty.html', requests=requests)
 
 @app.route('/security', methods=['GET', 'POST'])
