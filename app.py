@@ -7,6 +7,9 @@ import qrcode
 from io import BytesIO
 from datetime import datetime
 from pyzbar import *
+import cv2
+import numpy as np
+from pyzbar import pyzbar
 from flask_socketio import SocketIO
 import spacy
 
@@ -228,6 +231,68 @@ def verify_qr(key):
         return render_template('verify_qr.html', student_id=request_data['student_id'], name=request_data['name'], reason=request_data['reason'], datetime=request_data['datetime'])
     else:
         return render_template('verify_qr_error.html', message='Invalid QR code or request not approved')
+    
+@app.route('/change', methods=['GET', 'POST'])
+def change():
+    if 'login_type' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        username = session['username']
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+
+        if session["login_type"] == 'student':
+            user = mongo.db.studentdata.find_one({'username': username, 'password': current_password})
+        elif session["login_type"] == 'security':
+            user = mongo.db.securitydata.find_one({'username': username, 'password': current_password})
+        elif session["login_type"] == 'faculty':
+            user = mongo.db.facultydata.find_one({'username': username, 'password': current_password})
+        else:
+            return "Invalid login type."
+
+        if user:
+            if session["login_type"] == 'student':
+                mongo.db.studentdata.update_one({'_id': user['_id']}, {'$set': {'password': new_password}})
+            elif session["login_type"] == 'security':
+                mongo.db.securitydata.update_one({'_id': user['_id']}, {'$set': {'password': new_password}})
+            elif session["login_type"] == 'faculty':
+                mongo.db.facultydata.update_one({'_id': user['_id']}, {'$set': {'password': new_password}})
+            return "Password updated successfully!"
+        else:
+            return "Incorrect username or password. Please try again."
+    return render_template('change.html')
+
+def generate_frames():
+    camera = cv2.VideoCapture(0)
+    while True:
+        success, frame = camera.read()  # Read frame from camera
+        if not success:
+            break
+        else:
+            # Scan for barcodes in the frame
+            barcode_data = scan_barcode(frame)
+
+            # If barcode detected, yield barcode data
+            if barcode_data:
+                yield f"data: {', '.join(barcode_data)}\n\n"
+
+def scan_barcode(image):
+    # Convert image to grayscale
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Find barcodes in the image
+    barcodes = pyzbar.decode(gray_image)
+
+    # Extract barcode data
+    barcode_data = []
+    for barcode in barcodes:
+        barcode_data.append(barcode.data.decode('utf-8'))
+    return barcode_data
+
+@app.route('/scan')
+def scan():
+    return Response(generate_frames(), mimetype='text/event-stream')
     
 
 @app.route('/cam')
