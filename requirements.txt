@@ -3,7 +3,7 @@ Flask-PyMongo==2.3.0
 qrcode[pil]==7.3
 gunicorn==21.2.0
 Werkzeug==2.2.2
-pyzbar==0.1.8
+pyzbar
 Flask-SocketIO==5.3.6
 spacy==2.2.4
 Flask-Session
