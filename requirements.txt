@@ -7,4 +7,3 @@ pyzbar
 Flask-SocketIO==5.3.6
 spacy==2.2.4
 Flask-Session
-opencv-python-headless
