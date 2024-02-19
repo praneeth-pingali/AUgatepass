@@ -28,21 +28,7 @@
 
             function startScanning() {
                 // Get access to the camera
-                navigator.mediaDevices.enumerateDevices()
-                    .then(function(devices) {
-                        var backCamera = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'));
-                        var constraints;
-
-                        if (backCamera) {
-                            // Use back camera on mobile devices if available
-                            constraints = { video: { deviceId: { exact: backCamera.deviceId } } };
-                        } else {
-                            // Use any available camera on laptops/PCs
-                            constraints = { video: true };
-                        }
-
-                        return navigator.mediaDevices.getUserMedia(constraints);
-                    })
+                navigator.mediaDevices.getUserMedia({ video: true })
                     .then(function(stream) {
                         var video = document.getElementById('scanner-video');
                         video.srcObject = stream;
