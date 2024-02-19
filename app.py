@@ -7,8 +7,6 @@ import qrcode
 from io import BytesIO
 from datetime import datetime
 from pyzbar import *
-import numpy as np
-from pyzbar import pyzbar
 from flask_socketio import SocketIO
 import spacy
 
