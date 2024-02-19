@@ -263,36 +263,7 @@ def change():
             return "Incorrect username or password. Please try again."
     return render_template('change.html')
 
-def generate_frames():
-    camera = cv2.VideoCapture(0)
-    while True:
-        success, frame = camera.read()  # Read frame from camera
-        if not success:
-            break
-        else:
-            # Scan for barcodes in the frame
-            barcode_data = scan_barcode(frame)
 
-            # If barcode detected, yield barcode data
-            if barcode_data:
-                yield f"data: {', '.join(barcode_data)}\n\n"
-
-def scan_barcode(image):
-    # Convert image to grayscale
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    # Find barcodes in the image
-    barcodes = pyzbar.decode(gray_image)
-
-    # Extract barcode data
-    barcode_data = []
-    for barcode in barcodes:
-        barcode_data.append(barcode.data.decode('utf-8'))
-    return barcode_data
-
-@app.route('/scan')
-def scan():
-    return Response(generate_frames(), mimetype='text/event-stream')
     
 
 @app.route('/cam')
