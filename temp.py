@@ -13,12 +13,8 @@ for i in range(301,355):
     c=str(i)
     username=strr+c
     password="password"
-    if(i<331):
-        mongo.db.students.insert_one({'username': username, 'faculty': "padmaja"})
-    else:
-        mongo.db.students.insert_one({'username': username, 'faculty': "anandbabu"})
-
+    mongo.db.studentdata.insert_one({'username': username, 'password': password})
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

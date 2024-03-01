@@ -257,7 +257,7 @@ def change():
                 mongo.db.securitydata.update_one({'_id': user['_id']}, {'$set': {'password': new_password}})
             elif session["login_type"] == 'faculty':
                 mongo.db.facultydata.update_one({'_id': user['_id']}, {'$set': {'password': new_password}})
-            return "Password updated successfully!"
+            return redirect("/logout")
         else:
             return "Incorrect username or password. Please try again."
     return render_template('change.html')
