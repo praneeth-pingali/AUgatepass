@@ -36,6 +36,8 @@ def prioritize_text(text):
         "bereavement": 2,
         "educational purposes": 1,
         "unplanned event": 1,
+        "dead": 3,
+
     }
 
     priority_labels = {
