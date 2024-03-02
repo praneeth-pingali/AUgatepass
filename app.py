@@ -139,7 +139,8 @@ def student():
         current_date = datetime.now().date().strftime('%d-%m-%Y')
         fac=mongo.db.students.find_one({'username': session['username']})
         facc=fac.get("faculty")
-        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date, 'priority': priority, 'faculty': facc})
+        checkk="False"
+        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date, 'priority': priority, 'faculty': facc, 'checkedout': checkk})
         return redirect(url_for('student'))
 
     return render_template('student.html')
@@ -224,12 +225,13 @@ def generate_qr(key):
 
 @app.route('/verifyqr/<key>')
 def verify_qr(key):
-    request_data = mongo.db.requests.find_one({'key': key, 'status': 'Approved'})
+    current_date = datetime.now().date().strftime('%d-%m-%Y')
+    request_data = mongo.db.requests.find_one({'key': key, 'status': 'Approved', 'checkedout': 'False', 'datetime': current_date})
     
     if request_data:
-        return render_template('verify_qr.html', student_id=request_data['student_id'], name=request_data['name'], reason=request_data['reason'], datetime=request_data['datetime'])
+        return render_template('verify_qr.html', key=request_data['key'],student_id=request_data['student_id'], name=request_data['name'], reason=request_data['reason'], datetime=request_data['datetime'])
     else:
-        return render_template('verify_qr_error.html', message='Invalid QR code or request not approved')
+        return render_template('verify_qr_error.html', message='Invalid QR code, used , expired or request not approved')
     
 @app.route('/change', methods=['GET', 'POST'])
 def change():
@@ -261,6 +263,11 @@ def change():
         else:
             return "Incorrect username or password. Please try again."
     return render_template('change.html')
+
+@app.route('/checkout/<key>')
+def checkout(key):
+    mongo.db.requests.update_one({'key': key}, {'$set': {'checkedout': 'True'}})
+    return redirect('/cam')
 
 
     
