@@ -97,7 +97,7 @@ def login():
             for key in list(session.keys()):
                 session.pop(key, None)
 
-    return render_template('login.html')
+    return render_template('index.html')
 
 @app.route("/logout")
 def logout():
