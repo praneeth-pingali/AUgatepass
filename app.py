@@ -283,7 +283,9 @@ def stats():
     date_counts = {}
     for request in requests_data:
         date = request['datetime'][0:2] + '-' + request['datetime'][3:5]  # Convert date to string format
-        date_counts[date] = date_counts.get(date, 0) + 1
+        current_month = datetime.now().month
+        if(int(request['datetime'][3:5]) == current_month):
+            date_counts[date] = date_counts.get(date, 0)+1
 
     dates = list(date_counts.keys())
     counts = list(date_counts.values())
