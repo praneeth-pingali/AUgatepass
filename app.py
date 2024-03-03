@@ -9,6 +9,9 @@ from datetime import datetime
 from pyzbar import *
 from flask_socketio import SocketIO
 import spacy
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -272,8 +275,35 @@ def checkout(key):
     mongo.db.requests.update_one({'key': key}, {'$set': {'checkouttime': current_time}})
     return redirect('/cam')
 
+@app.route('/stats')
+def stats():
+    faculty_name = session.get('username')
+    requests_data = mongo.db.requests.find({'faculty': faculty_name})
 
-    
+    date_counts = {}
+    for request in requests_data:
+        date = request['datetime'][0:2] + '-' + request['datetime'][3:5]  # Convert date to string format
+        date_counts[date] = date_counts.get(date, 0) + 1
+
+    dates = list(date_counts.keys())
+    counts = list(date_counts.values())
+
+    plt.bar(dates, counts)
+    plt.xlabel('Date')
+    plt.title('Requests Received by Date')
+    plt.xticks(rotation=45)
+
+    for i in range(len(dates)):
+        plt.text(i, counts[i], str(counts[i]), ha='center', va='bottom')
+
+    plt.yticks([])
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode()
+    plt.close()
+
+    return send_file(img, mimetype='image/png')
 
 @app.route('/cam')
 def index():
