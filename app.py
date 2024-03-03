@@ -90,8 +90,9 @@ def login():
                 return redirect(url_for('faculty'))
             elif login_type == 'security':
                 return redirect(url_for('security'))
-            elif login_type == 'view_requests':
-                return redirect(url_for('view_requests'))
+        else:
+            for key in list(session.keys()):
+                session.pop(key, None)
 
     return render_template('login.html')
 
@@ -140,7 +141,7 @@ def student():
         fac=mongo.db.students.find_one({'username': session['username']})
         facc=fac.get("faculty")
         checkk="False"
-        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date, 'priority': priority, 'faculty': facc, 'checkedout': checkk})
+        mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date, 'priority': priority, 'faculty': facc, 'checkedout': checkk, 'checkouttime': "Null"})
         return redirect(url_for('student'))
 
     return render_template('student.html')
@@ -266,7 +267,9 @@ def change():
 
 @app.route('/checkout/<key>')
 def checkout(key):
+    current_time = datetime.now().strftime('%H:%M:%S')
     mongo.db.requests.update_one({'key': key}, {'$set': {'checkedout': 'True'}})
+    mongo.db.requests.update_one({'key': key}, {'$set': {'checkouttime': current_time}})
     return redirect('/cam')
 
 
