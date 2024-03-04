@@ -212,8 +212,9 @@ def view_requests():
     
         student_id = session['username']
         requests = list(mongo.db.requests.find({'student_id': student_id}))
+        current_date = datetime.now().date().strftime('%d-%m-%Y')
         
-        approved_requests = [req for req in requests if req['status'] == 'Approved']
+        approved_requests = [req for req in requests if req['status'] == 'Approved' and req['datetime'] == current_date]
 
         return render_template('view_requests.html', student_id=student_id, requests=requests, approved_requests=approved_requests)  
 
