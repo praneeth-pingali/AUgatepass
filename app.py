@@ -275,37 +275,66 @@ def checkout(key):
     mongo.db.requests.update_one({'key': key}, {'$set': {'checkouttime': current_time}})
     return redirect('/cam')
 
-@app.route('/stats')
+@app.route('/stats', methods=['GET', 'POST'])
 def stats():
-    faculty_name = session.get('username')
-    requests_data = mongo.db.requests.find({'faculty': faculty_name})
+    plot_url1 = None
+    plot_url2 = None
+    if request.method == 'POST':
+        student_id = request.form['student_id']
 
-    date_counts = {}
-    for request in requests_data:
-        date = request['datetime'][0:2] + '-' + request['datetime'][3:5]  # Convert date to string format
-        current_month = datetime.now().month
-        if(int(request['datetime'][3:5]) == current_month):
-            date_counts[date] = date_counts.get(date, 0)+1
+        # Plot 1: Requests received by date
+        requests_data = mongo.db.requests.find({'faculty': session.get('username')})
+        date_counts = {}
+        for request_ in requests_data:
+            date = request_['datetime'][0:2] + '-' + request_['datetime'][3:5]  # Convert date to string format
+            current_month = datetime.now().month
+            if int(request_['datetime'][3:5]) == current_month:
+                date_counts[date] = date_counts.get(date, 0) + 1
 
-    dates = list(date_counts.keys())
-    counts = list(date_counts.values())
+        dates = list(date_counts.keys())
+        counts = list(date_counts.values())
 
-    plt.bar(dates, counts)
-    plt.xlabel('Date')
-    plt.title('Requests Received by Date')
-    plt.xticks(rotation=45)
+        plt.bar(dates, counts)
+        plt.xlabel('Date')
+        plt.title('Requests Received by Date')
+        plt.xticks(rotation=45)
 
-    for i in range(len(dates)):
-        plt.text(i, counts[i], str(counts[i]), ha='center', va='bottom')
+        for i in range(len(dates)):
+            plt.text(i, counts[i], str(counts[i]), ha='center', va='bottom')
 
-    plt.yticks([])
-    img = BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode()
-    plt.close()
+        plt.yticks([])
+        img = BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plot_url1 = base64.b64encode(img.getvalue()).decode()
+        plt.close()
 
-    return send_file(img, mimetype='image/png')
+        # Plot 2: Requests made by specific student ID
+        requests_data = mongo.db.requests.find({'student_id': student_id})
+        date_counts = {}
+        for request_ in requests_data:
+            date = request_['datetime'][0:2] + '-' + request_['datetime'][3:5]  # Convert date to string format
+            date_counts[date] = date_counts.get(date, 0) + 1
+
+        dates = list(date_counts.keys())
+        counts = list(date_counts.values())
+
+        plt.bar(dates, counts, color='orange')
+        plt.xlabel('Date')
+        plt.title('Requests Received by Date for Student ID: {}'.format(student_id))
+        plt.xticks(rotation=45)
+
+        for i in range(len(dates)):
+            plt.text(i, counts[i], str(counts[i]), ha='center', va='bottom')
+
+        plt.yticks([])
+        img = BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plot_url2 = base64.b64encode(img.getvalue()).decode()
+        plt.close()
+
+    return render_template('stats.html', plot_url1=plot_url1, plot_url2=plot_url2)
 
 @app.route('/cam')
 def index():
