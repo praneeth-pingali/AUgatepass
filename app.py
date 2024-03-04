@@ -184,7 +184,7 @@ def security():
             reason = request.form['reason']
             number = request.form['number']
             current_datetime = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
-            mongo.db.visitors.insert_one({'name': name, 'reason': reason, 'number': number, 'datetime': current_datetime})
+            mongo.db.visitors.insert_one({'name': name, 'reason': reason, 'number': number, 'datetime': current_datetime, 'checkout': False})
 
             return redirect(url_for('security'))
 
@@ -197,6 +197,15 @@ def visitors_log():
     visitors = mongo.db.visitors.find()
 
     return render_template('visitors_log.html', visitors=visitors)
+
+@app.route('/security/checkout/<visitor_id>', methods=['POST'])
+def checkout_visitor(visitor_id):
+    checkout_time = datetime.now()
+    mongo.db.visitors.update_one(
+        {'_id': ObjectId(visitor_id)},
+        {'$set': {'checkout': True, 'checkout_time': checkout_time}}
+    )
+    return redirect(url_for('visitors_log'))
 
 @app.route('/view_requests', methods=['GET', 'POST'])
 def view_requests():
