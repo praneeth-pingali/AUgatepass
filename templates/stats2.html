@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats</title>
+</head>
+<body>
+    {% if plot_url2 %}
+        <h2>Requests Received by Date by You:</h2>
+        <img src="data:image/png;base64,{{ plot_url2 }}" alt="Requests Graph">
+    {% endif %}
+</body>
+</html>

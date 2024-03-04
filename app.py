@@ -336,6 +336,36 @@ def stats():
 
     return render_template('stats.html', plot_url1=plot_url1, plot_url2=plot_url2)
 
+@app.route('/stats2', methods=['GET', 'POST'])
+def stats2():
+    plot_url2 = None
+    requests_data = mongo.db.requests.find({'student_id': session["username"]})
+    date_counts = {}
+    for request_ in requests_data:
+            date = request_['datetime'][0:2] + '-' + request_['datetime'][3:5]  # Convert date to string format
+            date_counts[date] = date_counts.get(date, 0) + 1
+
+    dates = list(date_counts.keys())
+    counts = list(date_counts.values())
+
+    plt.bar(dates, counts, color='orange')
+    plt.xlabel('Date')
+    plt.title('Requests Received by Date: ')
+    plt.xticks(rotation=45)
+
+    for i in range(len(dates)):
+            plt.text(i, counts[i], str(counts[i]), ha='center', va='bottom')
+
+    plt.yticks([])
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url2 = base64.b64encode(img.getvalue()).decode()
+    plt.close()
+
+    return render_template('stats2.html', plot_url2=plot_url2)
+
+
 @app.route('/cam')
 def index():
     return render_template('cam.html')
