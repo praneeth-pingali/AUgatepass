@@ -1,35 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Page</title>
+    <title>Student Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
-        <style>
-        .options-container {
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .container {
             display: flex;
+            height: auto;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .options-container {
+            width: 20%;
+            /* background-color: #f0f0f0; */
+            display: flex;
+            /* margin-top: 5%; */
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+        }
+
+        .form-container {
+            width: 80%;
+            /* margin-top: 5%; */
+            padding: 60px;
+        }
+
+        .option-button {
+            margin: 10px;
+            /* Add some spacing between buttons */
+            width: 150px;
+            /* Set a fixed width for the buttons */
+            height: 50px;
+            text-align: center;
+            /* Center align text */
+            padding: 10px 20px;
+            /* Increase padding to make buttons larger */
+            font-size: 16px;
+            /* Increase font size */
+        }
+
+        .photo-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+            /* margin-top: 5%; */
+            padding: 20px;
+            /* Center-align text */
+        }
+
+        .photo-container img {
+            max-width: 100%;
+            /* Ensure the image does not exceed container width */
+        }
+
+        .photo-container h2,
+        .photo-container p {
+            margin: 10px 0;
+            /* Add some spacing between elements */
+        }
+
+        .nav-option {
+            margin-top: 0%;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
+            transition: transform 0.3s ease;
+            /* Add transition for smooth animation */
+        }
+
+        .nav-option:hover {
+            transform: scale(1.1);
+            box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
+            /* Enlarge the button on hover */
+        }
+
+        .photo-container img {
+            max-width: 100%;
+            /* Ensure the image does not exceed container width */
+            height: auto;
+            /* Allow the height to adjust proportionally */
+            width: 100%;
+            /* Set width to fill the container */
+            max-height: 200px;
+            /* Limit the height to avoid excessive stretching */
         }
     </style>
-	
 </head>
+
 <body>
-    <br><br><br>
-	<form action="{{ url_for('student') }}" method="post">
-	<h1>Welcome {{ session.name }}</h1>
-    	<h3>Submit New Request</h2>
-        <label for="reason">Reason</label>
-        <textarea id="reason" name="reason" required></textarea><br>
-        <button type="submit">Submit Request</button>
+    <header>
+        <h1>Student Dashboard</h1>
+    </header>
 
-    </form>
+    <nav class="navbar">
+        <a href="{{ url_for('view_requests') }}" class="nav-option btn btn-primary">View Requests</a>
+        <a href="{{ url_for('stats2') }}" class="nav-option btn btn-primary">Statistics</a>
+        <a href="{{ url_for('change') }}" class="nav-option btn btn-primary">Change Password</a>
+        <a href="{{ url_for('logout') }}" class="nav-option btn btn-primary">Logout</a>
+    </nav>
 
-    <div class="options-container">
-        <a class="option-button" href="{{ url_for('view_requests') }}">View Requests</a>
-        <a class="option-button" href="{{ url_for('stats2') }}">Statistics</a>
-        <a class="option-button" href="{{ url_for('change') }}">Change Password</a>
-        <a class="option-button" href="{{ url_for('logout') }}">Logout</a>
+    <div class="container">
+        <div class="photo-container">
+            <!-- Photo and Name go here -->
+            <!-- <img src="{{ url_for('static', filename='images/bg_1.jpg') }}" alt="Student Photo"> -->
+            <h3>Abhishek Parally</h3>
+            <h3>20EG112301</h3>
+            <h3>Mentor : Dr. D. L. Padmaja</h3>
+            <h3>Section : C</h3>
+        </div>
+        <form action="{{ url_for('student') }}" method="post" class="form-container">
+            <h3>Submit New Request</h3>
+            <label for="reason">Reason</label>
+            <textarea id="reason" name="reason" required></textarea><br>
+            <button type="submit" class="nav-option btn btn-primary">Submit Request</button>
+        </form>
     </div>
+
+    <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 </body>
+
 </html>
