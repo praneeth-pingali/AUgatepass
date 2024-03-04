@@ -91,6 +91,7 @@
             font-size: 16px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
             transition: transform 0.3s ease;
+            margin: 10px;
             /* Add transition for smooth animation */
         }
 
@@ -118,12 +119,20 @@
         <h1>Student Dashboard</h1>
     </header>
 
-    <nav class="navbar">
-        <a href="{{ url_for('view_requests') }}" class="nav-option btn btn-primary">View Requests</a>
-        <a href="{{ url_for('stats2') }}" class="nav-option btn btn-primary">Statistics</a>
-        <a href="{{ url_for('change') }}" class="nav-option btn btn-primary">Change Password</a>
-        <a href="{{ url_for('logout') }}" class="nav-option btn btn-primary">Logout</a>
-    </nav>
+   <nav class="navbar navbar-expand-md navbar-light bg-white">
+    <a class="navbar-brand" href="#">Navigation</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li><a href="{{ url_for('view_requests') }}" class="nav-option btn btn-primary mr-5">View Requests</a></li>
+            <li><a href="{{ url_for('stats2') }}" class="nav-option btn btn-primary mr-5">Statistics</a></li>
+            <li><a href="{{ url_for('change') }}" class="nav-option btn btn-primary mr-5">Change Password</a></li>
+            <li><a href="{{ url_for('logout') }}" class="nav-option btn btn-primary mr-5">Logout</a></li>
+        </ul>
+    </div>
+</nav>
 
     <div class="container">
         <div class="photo-container">

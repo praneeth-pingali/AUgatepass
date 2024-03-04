@@ -95,3 +95,20 @@ button:hover {
   text-align: center;
   margin-top: 10px; /* Adjust the margin-top as needed */
 }
+@media only screen and (max-width: 600px) {
+  /* Adjust styles for mobile devices */
+  .container {
+      flex-direction: column; /* Stack elements vertically */
+      align-items: center; /* Center align elements */
+  }
+  .options-container {
+      width: 100%; /* Full width for options */
+      margin-bottom: 20px; /* Add space below options */
+  }
+  .form-container {
+      width: 100%; /* Full width for form */
+  }
+  .option-button {
+      width: 100%; /* Full width for option buttons */
+  }
+}
