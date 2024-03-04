@@ -80,6 +80,8 @@ def login():
             user_data = mongo.db.studentdata.find_one({'username': username, 'password': password})
             user = mongo.db.students.find_one({'username': username})
             session['name'] = user.get('name', '')
+            fac=mongo.db.students.find_one({'username': session['username']})
+            session['mentor'] = fac.get("faculty")
         elif login_type == 'faculty':
             user_data = mongo.db.facultydata.find_one({'username': username, 'password': password})
         elif login_type == 'security':
