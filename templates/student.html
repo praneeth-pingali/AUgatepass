@@ -129,10 +129,9 @@
         <div class="photo-container">
             <!-- Photo and Name go here -->
             <!-- <img src="{{ url_for('static', filename='images/bg_1.jpg') }}" alt="Student Photo"> -->
-            <h3>Abhishek Parally</h3>
-            <h3>20EG112301</h3>
-            <h3>Mentor : Dr. D. L. Padmaja</h3>
-            <h3>Section : C</h3>
+            <h3>Welcome {{session['name']}}</h3>
+            <h3>{{session['username']}}</h3>
+            <h3>Mentor: {{session['mentor']}}</h3>
         </div>
         <form action="{{ url_for('student') }}" method="post" class="form-container">
             <h3>Submit New Request</h3>
