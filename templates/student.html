@@ -35,9 +35,7 @@
 
         .options-container {
             width: 20%;
-            /* background-color: #f0f0f0; */
             display: flex;
-            /* margin-top: 5%; */
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -45,22 +43,16 @@
 
         .form-container {
             width: 80%;
-            /* margin-top: 5%; */
             padding: 60px;
         }
 
         .option-button {
             margin: 10px;
-            /* Add some spacing between buttons */
             width: 150px;
-            /* Set a fixed width for the buttons */
             height: 50px;
             text-align: center;
-            /* Center align text */
             padding: 10px 20px;
-            /* Increase padding to make buttons larger */
             font-size: 16px;
-            /* Increase font size */
         }
 
         .photo-container {
@@ -69,20 +61,14 @@
             justify-content: center;
             align-items: center;
             max-width: 100%;
-            /* margin-top: 5%; */
             padding: 20px;
-            /* Center-align text */
         }
 
         .photo-container img {
             max-width: 100%;
-            /* Ensure the image does not exceed container width */
-        }
-
-        .photo-container h2,
-        .photo-container p {
-            margin: 10px 0;
-            /* Add some spacing between elements */
+            max-height: 200px;
+            height: auto;
+            width: auto;
         }
 
         .nav-option {
@@ -92,24 +78,11 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
             transition: transform 0.3s ease;
             margin: 10px;
-            /* Add transition for smooth animation */
         }
 
         .nav-option:hover {
             transform: scale(1.1);
             box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
-            /* Enlarge the button on hover */
-        }
-
-        .photo-container img {
-            max-width: 100%;
-            /* Ensure the image does not exceed container width */
-            height: auto;
-            /* Allow the height to adjust proportionally */
-            width: 100%;
-            /* Set width to fill the container */
-            max-height: 200px;
-            /* Limit the height to avoid excessive stretching */
         }
     </style>
 </head>
@@ -119,28 +92,37 @@
         <h1>Student Dashboard</h1>
     </header>
 
-   <nav class="navbar navbar-expand-md navbar-light bg-white">
-    <a class="navbar-brand" href="#">Navigation</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li><a href="{{ url_for('view_requests') }}" class="nav-option btn btn-primary mr-5">View Requests</a></li>
-            <li><a href="{{ url_for('stats2') }}" class="nav-option btn btn-primary mr-5">Statistics</a></li>
-            <li><a href="{{ url_for('change') }}" class="nav-option btn btn-primary mr-5">Change Password</a></li>
-            <li><a href="{{ url_for('logout') }}" class="nav-option btn btn-primary mr-5">Logout</a></li>
-        </ul>
-    </div>
-</nav>
+    <nav class="navbar navbar-expand-md navbar-light bg-white">
+        <a class="navbar-brand" href="#">Navigation</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li><a href="{{ url_for('view_requests') }}" class="nav-option btn btn-primary mr-5">View Requests</a></li>
+                <li><a href="{{ url_for('stats2') }}" class="nav-option btn btn-primary mr-5">Statistics</a></li>
+                <li><a href="{{ url_for('change') }}" class="nav-option btn btn-primary mr-5">Change Password</a></li>
+                <li><a href="{{ url_for('logout') }}" class="nav-option btn btn-primary mr-5">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
 
     <div class="container">
         <div class="photo-container">
             <!-- Photo and Name go here -->
-            <!-- <img src="{{ url_for('static', filename='images/bg_1.jpg') }}" alt="Student Photo"> -->
-            <h3>Welcome {{session['name']}}</h3>
-            <h3>{{session['username']}}</h3>
-            <h3>Mentor: {{session['mentor']}}</h3>
+            {% if session['username'] %}
+                {% if session['username'] %}
+                <img src="/photos/{{ session['username'] }}.jpg" alt="User Photo" class="user-photo">
+                {% else %}
+                    <p>No photo available</p>
+                {% endif %}
+                <h3>{{ session['username'] }}</h3>
+                <h3>Welcome {{ session['name'] }}</h3>
+                <h3>Mentor: {{ session['mentor'] }}</h3>
+            {% else %}
+                <p>No user logged in.</p>
+            {% endif %}
         </div>
         <form action="{{ url_for('student') }}" method="post" class="form-container">
             <h3>Submit New Request</h3>

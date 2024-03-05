@@ -13,7 +13,7 @@
         <p>{{ message }}</p>
     {% endif %}
 
-    <form method="post" action="{{ url_for('register') }}">
+    <form method="post" action="{{ url_for('register') }}" enctype="multipart/form-data">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
 
@@ -26,6 +26,9 @@
             <option value="faculty">Faculty</option>
             <option value="security">Security</option>
         </select>
+
+        <label for="photo">Photo:</label>
+        <input type="file" id="photo" name="photo">
 
         <button type="submit">Register</button>
     </form>

@@ -6,15 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verified QR Code</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style5.css') }}">
+    <style>
+        .student-photo {
+            max-width: 200px; /* Set maximum width */
+            max-height: 200px; /* Set maximum height */
+            width: auto; /* Ensure image aspect ratio is maintained */
+            height: auto; /* Ensure image aspect ratio is maintained */
+        }
+
+        body {
+            font-size: 16px; /* Set base font size */
+        }
+
+        .photo-container {
+            margin-bottom: 20px; /* Add spacing between photo and details */
+        }
+
+        @media only screen and (min-width: 600px) {
+            /* Adjust layout for screens wider than 600px (non-mobile devices) */
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .details {
+                text-align: left; /* Align details to left */
+                max-width: 400px; /* Limit details width */
+            }
+
+            .checkout-button {
+                margin-top: 20px; /* Add spacing above the checkout button */
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Verified QR Code</h1>
-    <p>
-        Student ID: {{ student_id }}<br>
-        Name: {{ name }}<br>
-        Reason: {{ reason }}<br>
-        Valid ON: {{ datetime }}
-    </p>
-    <a href="/checkout/{{ key }}"><button>Checked Out</button></a>
+    <div class="container">
+        <h1>Verified QR Code</h1>
+        <div class="photo-container">
+            <img src="/photos/{{ student_id }}.jpg" alt="Student Photo" class="student-photo">
+        </div>
+        <div class="details">
+            <p>
+                Student ID: {{ student_id }}<br>
+                Name: {{ name }}<br>
+                Reason: {{ reason }}<br>
+                Valid ON: {{ datetime }}
+            </p>
+        </div>
+        <a href="/checkout/{{ key }}" class="checkout-button"><button>Checked Out</button></a>
+    </div>
 </body>
 </html>

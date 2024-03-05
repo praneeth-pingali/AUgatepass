@@ -12,12 +12,18 @@ import spacy
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+from werkzeug.utils import secure_filename
+import os
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
+UPLOAD_FOLDER = 'photos'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app.config['MONGO_URI'] = 'mongodb+srv://pingalipraneeth1:DgCwSk9Cn9mTx32a@augatepass.1dvhlzv.mongodb.net/gatepass_db?retryWrites=true&w=majority'
 app.config['SECRET_KEY'] = 'your_secret_key'  
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 mongo = PyMongo(app)
 nlp = spacy.load("en_core_web_sm")
 
@@ -106,12 +112,28 @@ def logout():
     session["login_type"] = None
     return redirect("/")
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         login_type = request.form['login_type']
+        photo = request.files['photo']
+
+        # Check if the photo has been uploaded
+        if photo.filename == '':
+            return "No selected file"
+        if photo and allowed_file(photo.filename):
+            filename = secure_filename(photo.filename)
+            # Rename the file to the username before saving
+            filename = secure_filename(username) + os.path.splitext(filename)[1]
+            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            return "Unsupported file format. Please upload an image."
 
         existing_user = None
         if login_type == 'student':
@@ -123,11 +145,11 @@ def register():
         if existing_user:
             return "Username already exists. Please choose a different username."
         if login_type == 'student':
-            mongo.db.studentdata.insert_one({'username': username, 'password': password})
+            mongo.db.studentdata.insert_one({'username': username, 'password': password, 'photo': filename})
         elif login_type == 'faculty':
-            mongo.db.facultydata.insert_one({'username': username, 'password': password})
+            mongo.db.facultydata.insert_one({'username': username, 'password': password, 'photo': filename})
         elif login_type == 'security':
-            mongo.db.securitydata.insert_one({'username': username, 'password': password})
+            mongo.db.securitydata.insert_one({'username': username, 'password': password, 'photo': filename})
         return "Registration successful. You can now log in."
 
     return render_template('register.html')
@@ -150,6 +172,11 @@ def student():
         return redirect(url_for('student'))
 
     return render_template('student.html')
+
+@app.route('/photos/<path:filename>')
+def photos(filename):
+    return send_from_directory('photos', filename)
+
 
 @app.route('/faculty', methods=['GET', 'POST'])
 def faculty():
