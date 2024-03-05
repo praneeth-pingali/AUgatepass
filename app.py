@@ -14,12 +14,13 @@ from io import BytesIO
 import base64
 from werkzeug.utils import secure_filename
 import os
+from flask_mail import Mail, Message
 
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 UPLOAD_FOLDER = 'photos'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'jpg'}
 
 app.config['MONGO_URI'] = 'mongodb+srv://pingalipraneeth1:DgCwSk9Cn9mTx32a@augatepass.1dvhlzv.mongodb.net/gatepass_db?retryWrites=true&w=majority'
 app.config['SECRET_KEY'] = 'your_secret_key'  
@@ -30,6 +31,14 @@ nlp = spacy.load("en_core_web_sm")
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'poppingaming1@gmail.com'
+app.config['MAIL_PASSWORD'] = 'atjj cynj vkwt ljkn'
+
+mail = Mail(app)
 
 def prioritize_text(text):
     doc = nlp(text.lower())  
@@ -310,9 +319,23 @@ def change():
 @app.route('/checkout/<key>')
 def checkout(key):
     current_time = datetime.now().strftime('%H:%M:%S')
+    request_data = mongo.db.requests.find_one({'key': key})
     mongo.db.requests.update_one({'key': key}, {'$set': {'checkedout': 'True'}})
     mongo.db.requests.update_one({'key': key}, {'$set': {'checkouttime': current_time}})
+    Name=request_data['name']
+    id=request_data['student_id']
+    subject = "Your Ward Checked Out"
+    sender = "poppingaming1@gmail.com"
+    recipients = ["pingalipraneeth1@gmail.com"]
+    body = f"Your Ward '{Name}' '{id}' has checked out University at {current_time}."
+    send_email(subject, sender, recipients, body)
     return redirect('/cam')
+
+
+def send_email(subject, sender, recipients, body):
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = body
+    mail.send(msg)
 
 @app.route('/stats', methods=['GET', 'POST'])
 def stats():
