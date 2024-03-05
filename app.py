@@ -44,18 +44,23 @@ def prioritize_text(text):
     doc = nlp(text.lower())  
     
     priority_keywords = {
-        "urgent": 2,
-        "health issue": 2,
+        "urgent": 3,
+        "health": 2,
+        "emergency": 3,
         "family emergency": 2,
         "personal reasons": 1,
         "vacation": 1,
         "wedding": 1,
         "birth of a child": 1,
-        "bereavement": 2,
+        "fever": 2,
+        "headache": 2,
+        "stomach pain": 2,
         "educational purposes": 1,
         "unplanned event": 1,
-        "dead": 3,
-
+        "death": 3,
+        "injury": 3,
+        "exam": 3,
+        "education": 3,    
     }
 
     priority_labels = {
