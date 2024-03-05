@@ -1,44 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <title>View Requests</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            /* Disable horizontal scrolling */
+        }
+
+        .viewport {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* Ensure each viewport occupies the entire viewport height */
+        }
+
+        header {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .header-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        /* .header-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .header-buttons button:hover {
+            background-color: #2980b9;
+        } */
+
+        .custom-button{
+            margin-top: 0%;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
+            transition: transform 0.3s ease;
+            margin: 10px
+        }
+
+        .custom-button:hover{
+            transform: scale(1.1);
+            box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
+        }
+
+        .requests-section {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.369);
+            /* margin: 20px auto; */
+            padding: 20px;
+            height: 100%;
+            width: 100%;
+            /* Subtract the header height (adjust as needed) */
+            overflow-y: auto;
+            /* Add scroll if content exceeds viewport height */
+        }
+
+
+
+        .qr-codes {
+            margin-bottom: 20px;
+        }
+
+        .qr-codes img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+    </style>
 </head>
-<body>   
 
-<div class="top-right-buttons">
-    <form action="{{ url_for('logout') }}" method="get">
-        <button type="submit">Logout</button>
-    </form> 
+<body>
+    <div class="viewport">
+        <header>
+            <h1>Your Requests</h1>
+            <div class="header-buttons">
+                <button onclick="scrollToAllRequests()" class="custom-button btn btn-primary">All Requests</button>
+                <form action="{{ url_for('logout') }}" method="get">
+                    <button type="submit" class="custom-button btn btn-primary">Logout</button>
+                </form> 
+                <form action="{{ url_for('student') }}" method="get">
+                    <button type="submit" class="custom-button btn btn-primary">Back To Home</button>
+                </form>
+            </div>
+        </header>
 
-<form action="{{ url_for('student') }}" method="get">
-        <button type="submit">Back To Home</button>
-    </form> 
-</div>
+        <div class="requests-section">
+            <h2>Display QR codes</h2>
+            <div class="qr-codes">
+                <!-- QR code content goes here -->
+                {% if approved_requests %}
+                {% for request in approved_requests %}
+                <p>
+                    Request ID: {{ request['_id'] }} | Status: {{ request['status'] }} | Name: {{ request['name'] }} |
+                    Reason: {{ request['reason'] }}
+                    <br>
+                    <img src="{{ url_for('generate_qr', key=request['key']) }}"
+                        alt="QR Code for Request ID {{ request['_id'] }}">
+                </p>
+                {% endfor %}
+                {% else %}
+                <p>No approved requests found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
-<h1>Requests for Student ID: {{ student_id }}</h1>
-    
-    {% if approved_requests %}
-        <h2>Approved Requests</h2>
-        {% for request in approved_requests %}
+    <div class="viewport">
+        <header>
+            <h1>Your Requests</h1>
+            <div class="header-buttons">
+                <button onclick="scrollToQR()" class="custom-button btn btn-primary">View QR Codes</button>
+            </div>
+        </header>
+        <div class="requests-section">
+            <h2>All Requests</h2>
+            <!-- All requests content goes here -->
+            {% if requests %}
+            {% for request in requests %}
             <p>
-                Request ID: {{ request['_id'] }} | Status: {{ request['status'] }} | Name: {{ request['name'] }} | Reason: {{ request['reason'] }}
-                <br>
-                <img src="{{ url_for('generate_qr', key=request['key']) }}" alt="QR Code for Request ID {{ request['_id'] }}">
+                Request ID: {{ request['_id'] }} | Status: {{ request['status'] }} | Name: {{ request['name'] }} |
+                Reason: {{ request['reason'] }}
             </p>
-        {% endfor %}
-    {% else %}
-        <p>No approved requests found.</p>
-    {% endif %}
+            {% endfor %}
+            {% else %}
+            <p>No requests found.</p>
+            {% endif %}
+        </div>
+    </div>
 
-    <h2>All Requests</h2>
-    {% for request in requests %}
-        <p>
-            Request ID: {{ request['_id'] }} | Status: {{ request['status'] }} | Name: {{ request['name'] }} | Reason: {{ request['reason'] }}
-        </p>
-    {% endfor %}
+    <script>
+        function scrollToQR() {
+            document.querySelector('.viewport:nth-of-type(1)').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToAllRequests() {
+            document.querySelector('.viewport:nth-of-type(2)').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
 </body>
+
 </html>
