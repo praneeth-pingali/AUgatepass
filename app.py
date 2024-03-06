@@ -15,6 +15,7 @@ import base64
 from werkzeug.utils import secure_filename
 import os
 from flask_mail import Mail, Message
+import time
 
 
 app = Flask(__name__)
@@ -88,6 +89,8 @@ def prioritize_text(text):
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if session.get("login_type"):
+        if (session["login_type"] == 'wrong'):
+            return redirect('/wrong')
         if (session["login_type"] == "student"):
             return redirect(url_for('student'))
         if (session["login_type"] == "faculty"):
@@ -106,9 +109,10 @@ def login():
         if login_type == 'student':
             user_data = mongo.db.studentdata.find_one({'username': username, 'password': password})
             user = mongo.db.students.find_one({'username': username})
-            session['name'] = user.get('name', '')
-            fac=mongo.db.students.find_one({'username': session['username']})
-            session['mentor'] = fac.get("faculty")
+            if user_data:
+                session['name'] = user.get('name', '')
+                fac=mongo.db.students.find_one({'username': session['username']})
+                session['mentor'] = fac.get("faculty")
         elif login_type == 'faculty':
             user_data = mongo.db.facultydata.find_one({'username': username, 'password': password})
         elif login_type == 'security':
@@ -123,8 +127,10 @@ def login():
             elif login_type == 'security':
                 return redirect(url_for('security'))
         else:
-            for key in list(session.keys()):
-                session.pop(key, None)
+            session["username"] = None
+            session["name"] = None
+            session["login_type"] = 'wrong'
+            return redirect("/")
 
     return render_template('index.html')
 
@@ -442,6 +448,10 @@ def stats2():
 
     return render_template('stats2.html', plot_url2=plot_url2)
 
+@app.route('/wrong')
+def wrong():
+    session["login_type"] = 'wrongggg'
+    return render_template('wrong.html')
 
 @app.route('/cam')
 def index():
