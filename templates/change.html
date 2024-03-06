@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f1f1f1;
+            background-color: #fff;
             margin: 0;
             padding: 0;
             display: flex;
@@ -30,7 +30,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.369);
             text-align: center;
         }
 
@@ -47,10 +47,24 @@
             border: 1px solid #ccc;
             box-sizing: border-box;
         }
+
+        .nav-option1 {
+            margin-top: 0%;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+
+        .nav-option1:hover {
+            transform: scale(1.1);
+            box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
+        }
     </style>
 </head>
 <body>
-    
+    <div class="container">
     <form method="post" class="form">
         <h2>Change Password</h2>
         <label for="current_password">Current Password:</label>
@@ -59,10 +73,11 @@
         <label for="new_password">New Password:</label>
         <input type="password" id="new_password" name="new_password" required>
         <br>
-        <input type="submit" value="Change Password" class="btn btn-block btn-primary">
+        <input type="submit" value="Change Password" class="nav-option1 btn btn-primary">
     </form>
-    <form action="{{ url_for('student') }}" method="get">
-        <button type="submit" class="btn btn-block btn-primary">Back To Home</button>
+    <form action="{{ url_for('student') }}" method="get" style="text-align: center; margin-top: 15px;">
+        <button type="submit" class="nav-option1 btn btn-primary">Back To Home</button>
     </form>
+</div>
 </body>
 </html>

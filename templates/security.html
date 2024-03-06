@@ -1,36 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="path/to/styles.css">
     <title>Security Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style6.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style4.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">  -->
 </head>
+<style>
+    .options-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        height: auto;
+    }
+
+    btn:hover {
+        transform: scale(1.1);
+    }
+
+    .nav-option1 {
+            margin-top: 0%;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+
+        .nav-option1:hover {
+            transform: scale(1.1);
+            box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
+        }
+
+    /* Responsive Styles */
+    @media screen and (max-width: 600px) {
+
+        /* Adjust styles for smaller screens */
+        .container {
+            padding: 10px;
+        }
+
+        .options-container {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            height: auto;
+        }
+    }
+</style>
+
 <body>
-    <h1>Welcome to the Security Page</h1>
+    <header>
+        <div class="container">
+            <h1><img src="{{ url_for('static', filename='anuraguniversity.png') }}"></h1>
+            <h1>AU Gatepass Security Page</h1> <!-- Updated header -->
+        </div>
+    </header>
 
-    <div class="options-container">
-        <a class="option-button" href="{{ url_for('security', action='entry') }}">Visitor Entry</a>
-        <a class="option-button" href="{{ url_for('visitors_log') }}">Visitors Log View</a>
-        <a class="option-button" href="https://augatepass.onrender.com/cam">Scan QR Code</a>
+    <main>
 
-        <a class="option-button" href="{{ url_for('logout') }}">Logout</a>
-    </div>
+        <div class="options-container">
+            <a class="nav-option1 btn btn-primary mr-2" href="{{ url_for('security', action='entry') }}">Visitor Entry</a>
+            <a class="nav-option1 btn btn-primary mr-2" href="{{ url_for('visitors_log') }}">Visitors Log View</a>
+            <a class="nav-option1 btn btn-primary mr-2" href="https://augatepass.onrender.com/cam">Scan QR Code</a>
+            <a class="nav-option1 btn btn-primary mr-2" href="{{ url_for('logout') }}">Logout</a>
+        </div>
 
-    {% if request.args.get('action') == 'entry' %}
-        <h2>Visitor Entry Form:</h2>
-        <form action="{{ url_for('security') }}" method="post">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br>
-            <label for="reason">Reason:</label>
-            <input type="text" id="reason" name="reason" required><br>
-            <label for="number">Number:</label>
-            <input type="text" id="number" name="number" required><br>
-            <input type="hidden" name="action" value="entry">
-            <button class="submit-button" type="submit">Submit</button>
-        </form>
-    {% endif %}
+
+        {% if request.args.get('action') == 'entry' %}
+        <div class="container" style="margin-top: 40px;">
+            <h2>Visitor Entry Form:</h2>
+            <form action="{{ url_for('security') }}" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br>
+                <label for="reason">Reason:</label>
+                <input type="text" id="reason" name="reason" required><br>
+                <label for="number">Number:</label>
+                <input type="text" id="number" name="number" required><br>
+                <input type="hidden" name="action" value="entry">
+                <button class="nav-option1 btn btn-primary" type="submit">Submit</button>
+            </form>
+            <form action="{{ url_for('student') }}" method="get">
+                <button type="submit" class="nav-option1 btn btn-primary">Back To Home</button>
+            </form>
+        </div>
+        {% endif %}
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('[formaction="{{ url_for('security') }}"]');
+            buttons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    // Set the value of the hidden input based on the clicked button
+                    document.querySelector('input[name="action"]').value = button.innerText.toLowerCase();
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>

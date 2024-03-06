@@ -2,34 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visitors Log View</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <title>Log View</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            color: #333;
+            padding: 10px 20px;
+            width: 100%;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .nav-option1 {
+            margin-top: 0%;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+
+        .nav-option1:hover {
+            transform: scale(1.1);
+            box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
+        }
+        /* Responsive styles */
+        @media screen and (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            header button {
+                margin-top: 10px;
+            }
+
+            table {
+                font-size: 14px;
+                max-width: 100%;
+                overflow-x: auto;
+                overflow-y: auto;
+                
+            }
+
+            th, td {
+                padding: 6px;
+            }
+            
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Log View</h1>
+        <form action="{{ url_for('student') }}" method="get">
+            <button type="submit" class="nav-option1 btn btn-primary">Back To Home</button>
+        </form>
+    </header>
 
-<div class="top-right-buttons">
-    <form action="{{ url_for('security') }}" method="get">
-        <button type="submit">Back To Home</button>
-    </form> 
-</div>
-
-<h1>Visitors Log View</h1>
-
-<table border="1">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Reason</th>
-            <th>Number</th>
-            <th>Date and Time</th>
-            <th>Checkout Time</th> <!-- New column for checkout time -->
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for visitor in visitors %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Reason</th>
+                <th>Number</th>
+                <th>Date and Time</th>
+                <th>Checkout Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be generated dynamically -->
+            {% for visitor in visitors %}
             <tr>
                 <td>{{ visitor['name'] }}</td>
                 <td>{{ visitor['reason'] }}</td>
@@ -45,14 +130,13 @@
                 <td>
                     {% if not visitor['checkout'] %}
                         <form action="{{ url_for('checkout_visitor', visitor_id=visitor['_id']) }}" method="post">
-                            <button type="submit">Checkout</button>
+                            <button type="submit" class="nav-option1 btn btn-primary">Checkout</button>
                         </form>
                     {% endif %}
                 </td>
             </tr>
         {% endfor %}
-    </tbody>
-</table>
-
+        </tbody>
+    </table>
 </body>
 </html>

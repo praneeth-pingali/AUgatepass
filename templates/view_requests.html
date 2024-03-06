@@ -95,10 +95,12 @@
         <header>
             <h1>Your Requests</h1>
             <div class="header-buttons">
-                <button onclick="scrollToAllRequests()" class="custom-button btn btn-primary">All Requests</button>
                 <form action="{{ url_for('logout') }}" method="get">
                     <button type="submit" class="custom-button btn btn-primary">Logout</button>
                 </form> 
+                
+                <button onclick="scrollToAllRequests()" class="custom-button btn btn-primary">All Requests</button>
+             
                 <form action="{{ url_for('student') }}" method="get">
                     <button type="submit" class="custom-button btn btn-primary">Back To Home</button>
                 </form>
@@ -130,7 +132,15 @@
         <header>
             <h1>Your Requests</h1>
             <div class="header-buttons">
+                <form action="{{ url_for('logout') }}" method="get">
+                    <button type="submit" class="custom-button btn btn-primary">Logout</button>
+                </form> 
+              
                 <button onclick="scrollToQR()" class="custom-button btn btn-primary">View QR Codes</button>
+              
+                <form action="{{ url_for('student') }}" method="get">
+                    <button type="submit" class="custom-button btn btn-primary">Back To Home</button>
+                </form>
             </div>
         </header>
         <div class="requests-section">
