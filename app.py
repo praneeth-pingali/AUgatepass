@@ -40,6 +40,13 @@ app.config['MAIL_PASSWORD'] = 'atjj cynj vkwt ljkn'
 
 mail = Mail(app)
 
+@app.after_request
+def add_cache_control(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
 def prioritize_text(text):
     doc = nlp(text.lower())  
     
@@ -124,6 +131,9 @@ def login():
 @app.route("/logout")
 def logout():
     session["login_type"] = None
+    session["username"] = None
+    session["name"] = None
+    
     return redirect("/")
 
 def allowed_file(filename):
