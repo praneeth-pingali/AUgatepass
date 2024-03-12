@@ -6,71 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faculty Page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style4.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">  -->
 </head>
-<style>
-    .requests-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Center-align items horizontally */
-        text-align: center; 
-    }
-    
-    .nav-option1 {
-            margin-top: 0%;
-            padding: 10px 20px;
-            font-size: 16px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
-            transition: transform 0.3s ease;
-            margin: 10px;
-        }
-
-        .nav-option1:hover {
-            transform: scale(1.1);
-            box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
-        }
-</style>
 <body>
-    <header>
-        <div class="container">
-            <h1><img src="{{ url_for('static', filename='anuraguniversity.png') }}" ></h1>
-            <h1>AU Gatepass Faculty Page</h1> <!-- Updated header -->
-            <a class="nav-option1 btn btn-primary" href="{{ url_for('stats') }}">Statistics</a>
-            <a class="nav-option1 btn btn-primary" href="{{ url_for('logout') }}">Logout</a>
-        </div>
-    </header>
+    <h1>Welcome Faculty</h1>
 
-    <main>
-        <div class="container">
-            <h2>Requests</h2>
-            <div class="requests-container">
-                <form action="{{ url_for('faculty') }}" method="post">
-                    {% for request in requests %}
-                        <div class="request-item">
-                            <p>
-                                Student ID: {{ request['student_id'] }} | Name: {{ request['name']}} | Reason: {{ request['reason']}} | Status: {{ request['status']  }} | Priority: {{ request['priority']}}
-                            </p>
-                            <div class="request-actions">
-                                <button class="nav-option1 allow" type="submit" name="request_id" value="{{ request['_id'] }}">Allow</button>
-                                <button class="nav-option1 deny" type="submit" name="request_id" value="{{ request['_id'] }}">Deny</button>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    <input type="hidden" name="action" value=""> <!-- Moved hidden input outside of the loop -->
-                </form>
-            </div>
-        </div>
-    </main>
+    <h2>Requests</h2>
+    <form action="{{ url_for('faculty') }}" method="post">
+        {% for request in requests %}
+            <p>
+                Request ID: {{ request['_id'] }} | Student ID: {{ request['student_id'] }} | Name: {{ request['name']}} | Reason: {{ request['reason']}} | Status: {{ request['status']  }} | Priority: {{ request['priority']}}
+                <button class="allow> type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Allow</button>
+                <button class="deny" type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Deny</button>
+                <input type="hidden" name="action" value="">  <!-- Single hidden input for action -->
+            </p>
+        {% endfor %}
+    </form>
 
-    <!-- <footer>
-        <div class="container">
-            <div class="options-container">
-                <a class="option-button" href="{{ url_for('stats') }}">Statistics</a>
-                <a class="option-button" href="{{ url_for('logout') }}">Logout</a>
-            </div>
-        </div>
-    </footer> -->
+    <div class="options-container">
+        <a class="option-button" href="{{ url_for('stats') }}">Statistics</a>
+        <a class="option-button" href="{{ url_for('logout') }}">Logout</a>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
