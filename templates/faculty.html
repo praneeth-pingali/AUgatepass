@@ -47,17 +47,16 @@
             <div class="requests-container">
                 <form action="{{ url_for('faculty') }}" method="post">
                     {% for request in requests %}
-                        <div class="request-item">
-                            <p>
-                                Student ID: {{ request['student_id'] }} | Name: {{ request['name']}} | Reason: {{ request['reason']}} | Status: {{ request['status']  }} | Priority: {{ request['priority']}}
-                            </p>
-                            <div class="request-actions">
-                                <button class="nav-option1 allow" type="submit" name="request_id" value="{{ request['_id'] }}">Allow</button>
-                                <button class="nav-option1 deny" type="submit" name="request_id" value="{{ request['_id'] }}">Deny</button>
-                            </div>
+                    <div class="requests-item">
+                        <p>
+                            Request ID: {{ request['_id'] }} | Student ID: {{ request['student_id'] }} | Name: {{ request['name']}} | Reason: {{ request['reason']}} | Status: {{ request['status']  }} | Priority: {{ request['priority']}}
+                        </p>
+                        <div class="request-actions">
+                            <button class="nav-option1 allow" type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Allow</button>
+                            <button class="nav-option1 deny" type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Deny</button>
+                            <input type="hidden" name="action" value="">  <!-- Single hidden input for action -->
                         </div>
                     {% endfor %}
-                    <input type="hidden" name="action" value=""> <!-- Moved hidden input outside of the loop -->
                 </form>
             </div>
         </div>
