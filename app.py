@@ -199,6 +199,11 @@ def student():
         facc=fac.get("faculty")
         checkk="False"
         mongo.db.requests.insert_one({'student_id': student_id, 'name': name, 'reason': reason, 'status': 'Pending', 'datetime': current_date, 'priority': priority, 'faculty': facc, 'checkedout': checkk, 'checkouttime': "Null"})
+        subject = "New GatePass Request"
+        sender = "poppingaming1@gmail.com"
+        recipients = ["pingalipraneeth1@gmail.com"]
+        body = f"New Gatepass request from '{name}' '{student_id}'."
+        send_email(subject, sender, recipients, body)
         return redirect(url_for('student'))
 
     return render_template('student.html')
