@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verified QR Code</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style5.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <style>
         .student-photo {
             max-width: 200px; /* Set maximum width */
@@ -39,6 +40,20 @@
                 margin-top: 20px; /* Add spacing above the checkout button */
             }
         }
+
+        .nav-option {
+            margin-top: 0%;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+
+        .nav-option:hover {
+            transform: scale(1.1);
+            box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
+        }
     </style>
 </head>
 <body>
@@ -55,7 +70,7 @@
                 Valid ON: {{ datetime }}
             </p>
         </div>
-        <a href="/checkout/{{ key }}" class="checkout-button"><button>Checked Out</button></a>
+        <a href="/checkout/{{ key }}" class="nav-option btn btn-primary mr-5"><button>Checked Out</button></a>
     </div>
 </body>
 </html>
