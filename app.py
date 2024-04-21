@@ -233,7 +233,7 @@ def faculty():
 
 @app.route('/security', methods=['GET', 'POST'])
 def security():
-    if 'login_type' not in session or session['login_type'] not in ['student', 'faculty', 'security']:
+    if 'login_type' not in session or session['login_type'] != 'security':
         return redirect(url_for('login'))
 
     if request.method == 'POST':
