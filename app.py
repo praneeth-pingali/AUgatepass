@@ -205,8 +205,11 @@ def student():
 
 @app.route('/photos/<path:filename>')
 def photos(filename):
-    return send_from_directory('photos', filename)
-
+    if filename=="20EG112331.jpg":
+        return send_from_directory('photos', filename)
+    else:
+        filename="person.jpg"
+        return send_from_directory('photos', 'person.jpg')
 
 @app.route('/faculty', methods=['GET', 'POST'])
 def faculty():

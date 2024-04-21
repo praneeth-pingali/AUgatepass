@@ -84,6 +84,20 @@
             transform: scale(1.1);
             box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
         }
+
+        /* Style for the pop-up message */
+        #popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+            z-index: 999;
+        }
     </style>
 </head>
 
@@ -132,9 +146,32 @@
         </form>
     </div>
 
+    <!-- Pop-up message div -->
+    <div id="popup" style="display: none;">
+        <p>Request submitted successfully!</p>
+    </div>
+
     <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script>
+        // Function to show the pop-up message
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+            setTimeout(function () {
+                document.getElementById('popup').style.display = 'none';
+            }, 3000); // Hide the pop-up after 3 seconds
+        }
+
+        // Add an event listener to the form submission
+        document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            // Perform form submission using AJAX or any method you prefer
+
+            // After successful submission, call the showPopup function
+            showPopup();
+        });
+    </script>
 </body>
 
 </html>
