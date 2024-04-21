@@ -115,7 +115,7 @@
                 {% for request in approved_requests %}
                 <p>
                     Request ID: {{ request['_id'] }} | Status: {{ request['status'] }} | Name: {{ request['name'] }} |
-                    Reason: {{ request['reason'] }}
+                    Reason: {{ request['reason'] }} | Date: {{ request['datetime'] }}
                     <br>
                     <img src="{{ url_for('generate_qr', key=request['key']) }}"
                         alt="QR Code for Request ID {{ request['_id'] }}">
@@ -150,7 +150,7 @@
             {% for request in requests %}
             <p>
                 Request ID: {{ request['_id'] }} | Status: {{ request['status'] }} | Name: {{ request['name'] }} |
-                Reason: {{ request['reason'] }}
+                Reason: {{ request['reason'] }} | Date: {{ request['datetime'] }}
             </p>
             {% endfor %}
             {% else %}
