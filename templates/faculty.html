@@ -49,7 +49,7 @@
                     {% for request in requests %}
                     <div class="requests-item">
                         <p>
-                            Request ID: {{ request['_id'] }} | Student ID: {{ request['student_id'] }} | Name: {{ request['name']}} | Reason: {{ request['reason']}} | Status: {{ request['status']  }} | Priority: {{ request['priority']}}
+                            Student ID: {{ request['student_id'] }} | Name: {{ request['name']}} | Reason: {{ request['reason']}} | Status: {{ request['status']  }} | Priority: {{ request['priority']}}
                         </p>
                         <div class="request-actions">
                             <button class="nav-option1 allow" type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Allow</button>

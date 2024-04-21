@@ -1,14 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stats</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <title>Stats</title>
+  <style>
+    /* Basic styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+      color: #333;
+    }
+
+    /* Header styles */
+    header {
+      background-color: #8A2BE2;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Container styles */
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    /* Heading styles */
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    /* Image styles */
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-option {
+            margin-top: 0%;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+
+        .nav-option:hover {
+            transform: scale(1.1);
+            box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
+        }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Requests Statistics</h1>
+    <a class="nav-option btn btn-primary" href="{{ url_for('student') }}">Back to Home</a>
+  </header>
+
+  <div class="container">
     {% if plot_url2 %}
-        <h2>Requests Received by Date by You:</h2>
-        <img src="data:image/png;base64,{{ plot_url2 }}" alt="Requests Graph">
+      <h2>Requests Received by Date by You:</h2>
+      <img src="data:image/png;base64,{{ plot_url2 }}" alt="Requests Graph">
     {% endif %}
+  </div>
 </body>
 </html>

@@ -1,24 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stats</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <title>Stats</title>
+  <style>
+    /* Basic styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    /* Header styles */
+    header {
+      background-color: #8A2BE2;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Form styles */
+    form {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      box-sizing: border-box;
+    }
+
+    /* button[type="submit"] {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    } */
+
+    /* Graph styles */
+    .graph-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-option {
+            margin-top: 0%;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.369);
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+
+        .nav-option:hover {
+            transform: scale(1.1);
+            box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.369);
+        }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
+  <header>
     <h1>Requests Statistics</h1>
-    <form action="/stats" method="post">
-        <label for="student_id">Enter Student ID:</label>
-        <input type="text" id="student_id" name="student_id">
-        <button type="submit">Submit</button>
-    </form>
-    {% if plot_url1 %}
-        <h2>All Requests Received by Date</h2>
-        <img src="data:image/png;base64,{{ plot_url1 }}" alt="Requests Graph">
-    {% endif %}
-    {% if plot_url2 %}
-        <h2>Requests Received by Date for Student ID: {{ student_id }}</h2>
-        <img src="data:image/png;base64,{{ plot_url2 }}" alt="Requests Graph">
-    {% endif %}
+    <a class="nav-option btn btn-primary" href="{{ url_for('faculty') }}">Back to Home</a>
+  </header>
+
+  <form action="/stats" method="post">
+    <label for="student_id">Enter Student ID:</label>
+    <input type="text" id="student_id" name="student_id">
+    <button type="submit" class="nav-option btn btn-primary mr-5"">Submit</button>
+  </form>
+
+  {% if plot_url1 %}
+    <div class="graph-container">
+      <h2>All Requests Received by Date</h2>
+      <img src="data:image/png;base64,{{ plot_url1 }}" alt="Requests Graph">
+    </div>
+  {% endif %}
+
+  {% if plot_url2 %}
+    <div class="graph-container">
+      <h2>Requests Received by Date for Student ID: {{ student_id }}</h2>
+      <img src="data:image/png;base64,{{ plot_url2 }}" alt="Requests Graph">
+    </div>
+  {% endif %}
 </body>
 </html>
