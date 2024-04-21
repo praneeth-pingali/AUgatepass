@@ -36,6 +36,7 @@
         <div class="container">
             <h1><img src="{{ url_for('static', filename='anuraguniversity.png') }}" ></h1>
             <h1>AU Gatepass Faculty Page</h1> <!-- Updated header -->
+            <h3>Welcome Dr.{{ session['username'] }}</h3>
             <a class="nav-option1 btn btn-primary" href="{{ url_for('stats') }}">Statistics</a>
             <a class="nav-option1 btn btn-primary" href="{{ url_for('logout') }}">Logout</a>
         </div>
