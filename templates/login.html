@@ -11,7 +11,7 @@
     <div class="container">
        <h1><img src="{{ url_for('static', filename='anuraguniversity.png') }}" ></h1>
 	 <h1> AU Gatepass Login </h1>
-        <form action="{{ url_for('login') }}" method="post" class="login-form">
+        <form action="{{ url_for('auth.login') }}" method="post" class="login-form">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <label for="password">Password:</label>

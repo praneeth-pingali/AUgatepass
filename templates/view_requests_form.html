@@ -9,7 +9,7 @@
 </head>
 <body>
     <h1>View Requests</h1>
-    <form action="{{ url_for('view_requests') }}" method="post">
+    <form action="{{ url_for('student.view_requests') }}" method="post">
         <label for="student_id">Student ID:</label>
         <input type="text" id="student_id" name="student_id" required><br>
         <button type="submit">Submit</button>

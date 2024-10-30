@@ -96,7 +96,7 @@
 <body>
     <header>
         <h1>Log View</h1>
-        <form action="{{ url_for('student') }}" method="get">
+        <form action="{{ url_for('security.securityFunction') }}" method="get">
             <button type="submit" class="nav-option1 btn btn-primary">Back To Home</button>
         </form>
     </header>
@@ -129,7 +129,7 @@
                 </td>
                 <td>
                     {% if not visitor['checkout'] %}
-                        <form action="{{ url_for('checkout_visitor', visitor_id=visitor['_id']) }}" method="post">
+                        <form action="{{ url_for('security.checkout_visitor', visitor_id=visitor['_id']) }}" method="post">
                             <button type="submit" class="nav-option1 btn btn-primary">Checkout</button>
                         </form>
                     {% endif %}

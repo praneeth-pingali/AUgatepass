@@ -37,8 +37,8 @@
             <h1><img src="{{ url_for('static', filename='anuraguniversity.png') }}" ></h1>
             <h1>AU Gatepass Faculty Page</h1> <!-- Updated header -->
             <h3>Welcome Dr.{{ session['username'] }}</h3>
-            <a class="nav-option1 btn btn-primary" href="{{ url_for('stats') }}">Statistics</a>
-            <a class="nav-option1 btn btn-primary" href="{{ url_for('logout') }}">Logout</a>
+            <a class="nav-option1 btn btn-primary" href="{{ url_for('faculty.stats') }}">Statistics</a>
+            <a class="nav-option1 btn btn-primary" href="{{ url_for('auth.logout') }}">Logout</a>
         </div>
     </header>
 
@@ -46,15 +46,15 @@
         <div class="container">
             <h2>Requests</h2>
             <div class="requests-container">
-                <form action="{{ url_for('faculty') }}" method="post">
+                <form action="{{ url_for('faculty.facultyFunction') }}" method="post">
                     {% for request in requests %}
                     <div class="requests-item">
                         <p>
                             Student ID: {{ request['student_id'] }} | Name: {{ request['name']}} | Reason: {{ request['reason']}} | Status: {{ request['status']  }} | Priority: {{ request['priority']}} | Date: {{ request['datetime'] }}
                         </p>
                         <div class="request-actions">
-                            <button class="nav-option1 allow" type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Allow</button>
-                            <button class="nav-option1 deny" type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty') }}">Deny</button>
+                            <button class="nav-option1 allow" type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty.facultyFunction') }}">Allow</button>
+                            <button class="nav-option1 deny" type="submit" name="request_id" value="{{ request['_id'] }}" formaction="{{ url_for('faculty.facultyFunction') }}">Deny</button>
                             <input type="hidden" name="action" value="">  <!-- Single hidden input for action -->
                         </div>
                     {% endfor %}
@@ -63,18 +63,9 @@
         </div>
     </main>
 
-    <!-- <footer>
-        <div class="container">
-            <div class="options-container">
-                <a class="option-button" href="{{ url_for('stats') }}">Statistics</a>
-                <a class="option-button" href="{{ url_for('logout') }}">Logout</a>
-            </div>
-        </div>
-    </footer> -->
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const buttons = document.querySelectorAll('[formaction="{{ url_for('faculty') }}"]');
+            const buttons = document.querySelectorAll('[formaction="{{ url_for('faculty.facultyFunction') }}"]');
             buttons.forEach(function (button) {
                 button.addEventListener('click', function () {
                     // Set the value of the hidden input based on the clicked button

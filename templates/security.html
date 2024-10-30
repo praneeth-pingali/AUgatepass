@@ -65,17 +65,17 @@
     <main>
 
         <div class="options-container">
-            <a class="nav-option1 btn btn-primary mr-1" href="{{ url_for('security', action='entry') }}">Visitor Entry</a>
-            <a class="nav-option1 btn btn-primary mr-1" href="{{ url_for('visitors_log') }}">Visitors Log View</a>
+            <a class="nav-option1 btn btn-primary mr-1" href="{{ url_for('security.securityFunction', action='entry') }}">Visitor Entry</a>
+            <a class="nav-option1 btn btn-primary mr-1" href="{{ url_for('security.visitors_log') }}">Visitors Log View</a>
             <a class="nav-option1 btn btn-primary mr-1" href="https://augatepass.onrender.com/cam">Scan QR Code</a>
-            <a class="nav-option1 btn btn-primary mr-1" href="{{ url_for('logout') }}">Logout</a>
+            <a class="nav-option1 btn btn-primary mr-1" href="{{ url_for('auth.logout') }}">Logout</a>
         </div>
 
 
         {% if request.args.get('action') == 'entry' %}
         <div class="container" style="margin-top: 40px;">
             <h2>Visitor Entry Form:</h2>
-            <form action="{{ url_for('security') }}" method="post">
+            <form action="{{ url_for('security.securityFunction') }}" method="post">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required><br>
                 <label for="reason">Reason:</label>
@@ -85,7 +85,7 @@
                 <input type="hidden" name="action" value="entry">
                 <button class="nav-option1 btn btn-primary" type="submit">Submit</button>
             </form>
-            <form action="{{ url_for('student') }}" method="get">
+            <form action="{{ url_for('student.studentFunction') }}" method="get">
                 <button type="submit" class="nav-option1 btn btn-primary">Back To Home</button>
             </form>
         </div>
@@ -94,7 +94,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const buttons = document.querySelectorAll('[formaction="{{ url_for('security') }}"]');
+            const buttons = document.querySelectorAll('[formaction="{{ url_for('security.securityFunction') }}"]');
             buttons.forEach(function (button) {
                 button.addEventListener('click', function () {
                     // Set the value of the hidden input based on the clicked button

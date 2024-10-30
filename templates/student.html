@@ -114,10 +114,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li><a href="{{ url_for('view_requests') }}" class="nav-option btn btn-primary mr-5">View Requests</a></li>
-                <li><a href="{{ url_for('stats2') }}" class="nav-option btn btn-primary mr-5">Statistics</a></li>
-                <li><a href="{{ url_for('change') }}" class="nav-option btn btn-primary mr-5">Change Password</a></li>
-                <li><a href="{{ url_for('logout') }}" class="nav-option btn btn-primary mr-5">Logout</a></li>
+                <li><a href="{{ url_for('student.view_requests') }}" class="nav-option btn btn-primary mr-5">View Requests</a></li>
+                <li><a href="{{ url_for('student.stats2') }}" class="nav-option btn btn-primary mr-5">Statistics</a></li>
+                <li><a href="{{ url_for('auth.change') }}" class="nav-option btn btn-primary mr-5">Change Password</a></li>
+                <li><a href="{{ url_for('auth.logout') }}" class="nav-option btn btn-primary mr-5">Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -138,7 +138,7 @@
                 <p>No user logged in.</p>
             {% endif %}
         </div>
-        <form id="requestForm" action="{{ url_for('student') }}" method="post" class="form-container">
+        <form id="requestForm" action="{{ url_for('student.studentFunction') }}" method="post" class="form-container">
             <h3>Submit New Request</h3>
             <label for="reason">Reason</label>
             <textarea id="reason" name="reason" required></textarea><br>
